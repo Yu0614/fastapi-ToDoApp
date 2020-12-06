@@ -23,14 +23,6 @@ app.add_middleware(
 # ----------APIの実装------------
 
 # ---------- usersの実装 ------------
-# テーブルにいる全ユーザ情報を取得 GET
-
-
-@app.get("/users")
-def read_users():
-    users = session.query(UsersTable).all()
-    return users
-
 # idにマッチするユーザ情報を取得 GET
 
 
@@ -72,6 +64,8 @@ async def update_users(users: List[User]):
 
 
 # 全todo情報を取得 : GET
+#  L TODO: user ログイン機能ができたら要改修, user_id で絞り込んでから返す。
+
 
 
 @app.get("/todos")
