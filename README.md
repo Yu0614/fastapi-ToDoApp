@@ -1,7 +1,7 @@
 # fastapi-ToDoApp
 
 This app is api server for [vue-TodoApp](https://github.com/Yu0614/vue-ToDoApp).
-So to use this app, use should see also that one.
+So to use this app, you should see also that one.
 
 ## How to start 
 
