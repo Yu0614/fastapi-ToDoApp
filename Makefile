@@ -10,11 +10,16 @@ down:
 .PHONY: down
 
 # db コンテナに bashで接続します。
-dbConnect:
+db:
 	docker exec -it db bash 
-.PHONY: dbConnect
+.PHONY: db
 
 # fast-api コンテナに bashで接続します。
-apiConnect:
+api:
 	docker exec -it fast-api bash
-.PHONY: apiConnect
+.PHONY: api
+
+# コンテナを再起動します。
+restart:
+	make down && make up
+.PHONY: restart
