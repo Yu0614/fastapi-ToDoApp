@@ -67,7 +67,6 @@ async def update_users(users: List[User]):
 #  L TODO: user ログイン機能ができたら要改修, user_id で絞り込んでから返す。
 
 
-
 @app.get("/todos")
 def read_todos():
     todos = session.query(TodosTable).all()
@@ -89,25 +88,26 @@ def read_todo(id: int):
 
 
 @app.post("/todos", status_code=201, response_model=AddNewTodoResponse)
-async def create_todo(user_id: int, title: str, place: Optional[str] = None, url: Optional[str] = None, memo: Optional[str] = None, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None):
+# async def create_todo(user_id: int, title: str, place: Optional[str] = None, url: Optional[str] = None, memo: Optional[str] = None, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None):
+async def create_todo(item: Todo):
     todo = TodosTable()
-    todo.user_id = user_id
-    todo.title = title
+    todo.user_id = item.user_id
+    todo.title = item.title
 
-    if place:
-        todo.place = place
+    if item.place:
+        todo.place = item.place
 
-    if url:
-        todo.url = url
+    if item.url:
+        todo.url = item.url
 
-    if memo:
-        todo.memo = memo
+    if item.memo:
+        todo.memo = item.memo
 
-    if start_date:
-        todo.start_date = start_date
+    if item.start_date:
+        todo.start_date = item.start_date
 
-    if end_date:
-        todo.end_date = end_date
+    if item.end_date:
+        todo.end_date = item.end_date
 
     try:
         session.add(todo)
@@ -118,7 +118,8 @@ async def create_todo(user_id: int, title: str, place: Optional[str] = None, url
 
     # 作成したtodoのidを返してあげる
     latest = session.query(TodosTable).\
-        filter(TodosTable.user_id == user_id).first()
+        filter(TodosTable.user_id == todo.user_id).order_by(
+            TodosTable.id.desc()).first()
 
     return {
         'id': latest.id
