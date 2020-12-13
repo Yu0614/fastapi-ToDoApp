@@ -64,12 +64,11 @@ async def update_users(users: List[User]):
 
 
 # 全todo情報を取得 : GET
-#  L TODO: user ログイン機能ができたら要改修, user_id で絞り込んでから返す。
 
 
 @app.get("/todos")
-def read_todos():
-    todos = session.query(TodosTable).all()
+def read_todos(user_id: int):
+    todos = session.query(TodosTable).filter(TodosTable.user_id == user_id).all()
     return todos
 
 # idにマッチするtodos情報を取得 GET
@@ -115,11 +114,14 @@ async def create_todo(item: Todo):
     except:
         session.rollback()
         raise
+    
 
     # 作成したtodoのidを返してあげる
     latest = session.query(TodosTable).\
         filter(TodosTable.user_id == todo.user_id).order_by(
             TodosTable.id.desc()).first()
+        
+    session.close()
 
     return {
         'id': latest.id
