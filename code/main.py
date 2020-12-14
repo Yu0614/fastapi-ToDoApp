@@ -120,8 +120,6 @@ async def create_todo(item: Todo):
     latest = session.query(TodosTable).\
         filter(TodosTable.user_id == todo.user_id).order_by(
             TodosTable.id.desc()).first()
-        
-    session.close()
 
     return {
         'id': latest.id
