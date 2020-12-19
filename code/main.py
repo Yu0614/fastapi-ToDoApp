@@ -68,7 +68,8 @@ async def update_users(users: List[User]):
 
 @app.get("/todos")
 def read_todos(user_id: int):
-    todos = session.query(TodosTable).filter(TodosTable.user_id == user_id).all()
+    todos = session.query(TodosTable).filter(
+        TodosTable.user_id == user_id).all()
     return todos
 
 # idにマッチするtodos情報を取得 GET
@@ -114,7 +115,6 @@ async def create_todo(item: Todo):
     except:
         session.rollback()
         raise
-    
 
     # 作成したtodoのidを返してあげる
     latest = session.query(TodosTable).\
@@ -124,3 +124,21 @@ async def create_todo(item: Todo):
     return {
         'id': latest.id
     }
+
+
+# idにマッチするtodos情報を削除 DELETE
+
+
+@app.delete("/todo/{id}")
+def delete_todo(id: int):
+    todo = session.query(TodosTable).\
+        filter(TodosTable.id == id).first()
+
+    try:
+        session.delete(todo)
+        session.commit()
+    except:
+        session.rollback()
+        raise
+
+    return {}
