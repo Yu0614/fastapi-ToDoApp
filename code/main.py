@@ -142,3 +142,39 @@ def delete_todo(id: int):
         raise
 
     return {}
+
+
+# todo情報を更新 PUT
+
+
+@app.put("/todo/{id}")
+async def update_todo(item: Todo):
+    todo = session.query(TodosTable).\
+        filter(TodosTable.id == item.id).filter(
+            TodosTable.user_id == item.user_id).first()
+
+    if item.place:
+        todo.place = item.place
+
+    if item.url:
+        todo.url = item.url
+
+    if item.memo:
+        todo.memo = item.memo
+
+    if item.start_date:
+        todo.start_date = item.start_date
+
+    if item.end_date:
+        todo.end_date = item.end_date
+
+    if item.title:
+        todo.title = item.title
+
+    try:
+        session.commit()
+    except:
+        session.rollback()
+        raise
+
+    return {}

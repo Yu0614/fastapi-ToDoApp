@@ -43,6 +43,7 @@ class TodosTable(Base):
 
 
 class Todo(BaseModel):
+    id: Optional[int]
     user_id: int
     title: str
     place: Optional[str]
